@@ -1,0 +1,36 @@
+import casa.*
+
+test "romper algo de valor 1000" {
+	casaDePepeYJulian.romperEnCosto(1000)
+	assert.equals(true,casaDePepeYJulian.necesitaReparacion())
+	assert.equals(false,casaDePepeYJulian.estaEnOrden())
+}
+
+test "depositar 1000 en cuenta con gastos"{
+	cuentaConGastos.depositar(1000)
+	assert.equals(980,cuentaConGastos.saldo())
+}
+
+test "depositar 100 en combinada"{
+	cuentaConGastos.costosPorOperacion(50)
+	cuentaCorriente.depositar(500)
+	cuentaCombinada.depositar(100)
+	assert.equals(50,cuentaConGastos.saldo())
+	cuentaCombinada.extraer(200)
+	assert.equals(50,cuentaConGastos.saldo())
+	assert.equals(300,cuentaCorriente.saldo())
+	assert.equals(350,cuentaCombinada.saldo())
+}
+
+test"50%viveres,100 pesos reparacion, 1000 pesos corriente asociada,estrategia full"{
+	casaDePepeYJulian.porcentajeDeViveres(50)
+	casaDePepeYJulian.romperEnCosto(100)
+	casaDePepeYJulian.cuentaGestion(cuentaCorriente)
+	cuentaCorriente.depositar(1000)
+	casaDePepeYJulian.estrategiaDeAhorro(full,5)
+	casaDePepeYJulian.mantenimiento()
+	assert.equals(90,casaDePepeYJulian.porcentajeDeViveres())
+	assert.equals(800,cuentaCorriente.saldo())
+	assert.equals(100,casaDePepeYJulian.costosDeReparacion())
+	assert.equals(true,casaDePepeYJulian.necesitaReparacion())
+}
